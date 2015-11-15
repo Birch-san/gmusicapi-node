@@ -35,9 +35,35 @@ var gmusicapi = require('gmusicapi-node');
 The `gmusicapi` you `require()`d will expose to you some useful functions. Err, one day.
 
 ```js
-var gmusicapi = require('gmusicapi-node');
+var gmusicapi = require('gmusicapi-node')();
 
 console.log(gmusicapi);
+```
+
+### Options
+If default state doesn't work out for you, `require()` the library with some options
+
+`pyshellOptions` is passed to [`python-shell`](https://github.com/extrabacon/python-shell). Any unrecognised options within this object will be passed through to `child_process.spawn`'s `options` object.
+
+You can assign a `string` to `pyshellOptions.pythonPath` to specify the path to your intended Python executable.
+
+You can assign an `object` of key-value pairs to `pyshellOptions.env` to provide environment variables to `child_process.spawn`.
+
+Here's an example:
+
+```js
+var options = {
+	// these options will be passed to `python-shell`
+	pyshellOptions: {
+		pythonPath: '/usr/local/bin/python',
+		env: {
+			// which directories (delimited by : character) Python should inspect when importing modules
+			'PYTHONPATH': '/usr/local/lib/python2.7/site-packages'
+		}
+	}
+};
+
+var lib = require('../src/js/index')(options);
 ```
 
 # Development

@@ -35,7 +35,7 @@ worker
 				JSON.stringify(unserialized)
 				)));
 		}
-		// require('./versioncheck')
+		require('./libCheck')
 		resolve();
 		console.log('JSON unserialization check succeeded; we are able to correctly unserialize JSON provided by Python');
 	}

@@ -1,4 +1,4 @@
-require('./sanitycheck');
+var globalState = require('./globalState');
 
 // var pyshell = new PythonShell(pathRelToCwd(sanityChecker));
 
@@ -15,4 +15,20 @@ require('./sanitycheck');
 //   console.log('finished');
 // });
 
-module.exports = {};
+
+function init(pyshellOptions) {
+	globalState.pyshellOptions = pyshellOptions;
+}
+
+function checkSanity() {
+	require('./sanitycheck');
+}
+
+module.exports = function(options) {
+	options = options || {}
+	init(options.pyshellOptions || {});
+
+	checkSanity();
+
+	return {};
+};

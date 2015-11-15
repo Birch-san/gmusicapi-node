@@ -2,10 +2,11 @@ var PythonShell = require('python-shell');
 var _ = require('lodash');
 var pathRelToCwd = require('./pathRelToCwd');
 var whenError = require('./whenError');
+var globalState = require('./globalState');
 
 module.exports = function(pathRelToRepoRoot, resultCallback, generalErrorText, options) {
 	var shellOptions = _.extend({
-	}, options || {});
+	}, options || {}, globalState.pyshellOptions);
 
 	var relativePath = pathRelToCwd(pathRelToRepoRoot);
 	return PythonShell.run(
