@@ -82,23 +82,13 @@ License: Copyright (c) 2015, Simon Weber
 Location: /usr/local/lib/python2.7/site-packages
 ```
 
+Note the `Location: /usr/local/lib/python2.7/site-packages`; this is where your package is installed.
+
 #### Second pass
-Make a python file and attempt to recruit functionality from `gmusicapi`:
-
-`scratch.py` (save this anywhere)
-```python
-from gmusicapi import Mobileclient
-
-api = Mobileclient()
-
-print api
-```
-
-Run your fiddle:
+Check whether you are capable now of importing gmusicapi
 
 ```bash
-# please bear in mind that this `python` may not be the same `python` executable that this Node library selects
-python scratch.py
+python -c "from gmusicapi import Mobileclient"
 ```
 
 If it blows up, then you've got a problem. 
