@@ -15,6 +15,6 @@ module.exports = {
 		}
 
 		return state.promise
-		.catch(whenError);
+		.catch(whenError.handle);
 	}
 }

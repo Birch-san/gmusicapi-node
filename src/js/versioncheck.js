@@ -1,6 +1,5 @@
 var path = require('path');
 var util = require('util');
-var whenError = require('./whenError');
 var pyshellWrapper = require('./pyshellWrapper');
 var worker = require('./worker');
 
@@ -42,8 +41,9 @@ worker
 				)));
 		}
 
-		resolve();
 		console.log('Python version check succeeded; we are executing this script with a supported version of Python (we support ~2.7).');
+		require('./jsonCheck')
+		resolve();
 	}
 
 	var generalErrorText = qualifyNominalError("was unable to invoke trivial Python script.");
