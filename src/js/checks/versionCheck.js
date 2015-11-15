@@ -45,7 +45,10 @@ worker
 				)));
 		}
 
-		console.log('Python version check succeeded; we are executing this script with a supported version of Python (we support ~2.7).');
+		console.log(util.format('Python version check succeeded; we are executing this script with a supported version of Python (we support ~2.7). You provided %d.%d.',
+			actualMajor,
+			actualMinor
+			));
 		require('./jsonCheck')
 		resolve();
 	}
