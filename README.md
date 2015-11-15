@@ -1,3 +1,58 @@
+# Purpose
+This Node library should enable you to invoke functionality of Simon Weber's [Unofficial Google Music API, `gmusicapi`](https://github.com/simon-weber/gmusicapi) from Node.
+
+It is _not_ a re-implementation; it binds to existing functionality from the Python module.
+
+The main reason for using this Node module is to stubbornly avoid learning Python.
+
+# Requirements
+## Python
+I assume (moreorless arbitrarily) that `gmusicapi` depends on Python 2.7. At the time of writing, [I see that Python 3 is not supported](https://github.com/simon-weber/gmusicapi/pull/312).
+
+I enforce that Major version must `== 2`, and Minor version must `>= 7`. You may have other Python executables available. For now I perform my version check upon whichever one the NodeJS [`python-shell`](https://github.com/extrabacon/python-shell) chooses.
+
+## Pip
+[`gmusicapi` recommends](https://unofficial-google-music-api.readthedocs.org/en/latest/usage.html#usage) installing itself via [`pip`](https://pip.pypa.io/en/latest/), which is a Python package manager.
+
+You would use `pip` to acquire the `gmusicapi` Python module.
+
+### Install `pip`
+Instructions [here](https://pip.pypa.io/en/latest/installing/)
+
+### Install `gmusicapi`
+Instructions [here](https://unofficial-google-music-api.readthedocs.org/en/latest/usage.html#usage), but essentially:
+
+```bash
+pip install gmusicapi
+```
+
+### Sanity check
+Wondering if `pip` has successfully installed `gmusicapi`? Ask it to show you what it installed:
+
+```bash
+pip show gmusicapi
+```
+
+Hopefully the reply looks something like this:
+
+```bash
+---
+Metadata-Version: 1.1
+Name: gmusicapi
+Version: 7.0.0
+Summary: An unofficial api for Google Play Music.
+Home-page: http://pypi.python.org/pypi/gmusicapi/
+Author: Simon Weber
+Author-email: simon@simonmweber.com
+License: Copyright (c) 2015, Simon Weber
+Location: /usr/local/lib/python2.7/site-packages
+```
+
+#### Extras
+If you intend to use the "upload music" APIs, you will need a way to transcode audio. For example `ffmpeg` or similar. Ensure that whatever you install for this purpose, is exposed on your PATH.
+
+You will want at least `libmp3lame` installed for use by your audio transcoder.
+
 # Installation
 Install this Node package to your own Node project.
 
