@@ -1,3 +1,4 @@
+var Promise = require('bluebird');
 var path = require('path');
 var util = require('util');
 var pyshellWrapper = require('../pyshellWrapper');

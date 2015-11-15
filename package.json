@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.0.5",
+    "keychain": "0.0.4",
     "lodash": "^3.10.1",
     "python-shell": "^0.2.0"
   }
