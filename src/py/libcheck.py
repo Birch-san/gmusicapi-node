@@ -1,3 +1,5 @@
-import json
+from gmusicapi import Mobileclient
 
-print json.dumps({'sup': 'yo'})
+api = Mobileclient()
+
+print api

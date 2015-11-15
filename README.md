@@ -32,6 +32,7 @@ If you intend to use the "upload music" APIs, you will need a way to transcode a
 You will want at least `libmp3lame` installed for use by your audio transcoder.
 
 ### Sanity check
+#### First pass
 Wondering if `pip` has successfully installed `gmusicapi`? Ask it to show you what it installed:
 
 ```bash
@@ -52,6 +53,20 @@ Author-email: simon@simonmweber.com
 License: Copyright (c) 2015, Simon Weber
 Location: /usr/local/lib/python2.7/site-packages
 ```
+
+#### Second pass
+Make a python file and attempt to recruit functionality from `gmusicapi`:
+
+```python
+from gmusicapi import Mobileclient
+
+api = Mobileclient()
+
+print api
+```
+
+If it blows up, then you've got a problem. 
+Fix that before continuing to use this Node library.
 
 # Installation
 Install this Node package to your own Node project.
