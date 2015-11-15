@@ -18,17 +18,23 @@ function init(options) {
 	}, options);
 }
 
-var sanityChecked = false;
+var sanityCheckPromise;
+
+// var sanityChecked = false;
 function checkSanity() {
-	if (sanityChecked) {
-		return Promise.resolve();
+	if (globalState.skipSanityChecks) {
+		sanityCheckPromise = Promise.resolve();
 	}
-	sanityChecked = true;
-	return require('./checks/sanityCheck')()
-	.then(require('./checks/versionCheck'))
-	.then(require('./checks/jsonCheck'))
-	.then(require('./checks/libCheck'))
-	.catch(whenError.handle);
+	
+	if (!sanityCheckPromise) {
+		sanityCheckPromise = require('./checks/sanityCheck')()
+		.then(require('./checks/versionCheck'))
+		.then(require('./checks/jsonCheck'))
+		.then(require('./checks/libCheck'))
+		.catch(whenError.handle);
+	}
+
+	return sanityCheckPromise;
 }
 
 var passwordGotten = false;
@@ -56,16 +62,14 @@ module.exports = function(options) {
 
 	var returnedBindings = bindings;
 
-	if (!globalState.skipSanityChecks){
-		returnedBindings = _.mapValues(returnedBindings, function(binding) {
-			return function() {
-				return checkSanity()
-				.then(function() {
-					return binding.apply(binding, arguments);
-				})
-			}
-		});
-	}
+	returnedBindings = _.mapValues(returnedBindings, function(binding) {
+		return function() {
+			return checkSanity()
+			.then(function() {
+				return binding.apply(binding, arguments);
+			})
+		}
+	});
 
 	if (globalState.credentials.usekeychain) {
 		globalState.credentials.keychainSpec.account = globalState.credentials.keychainSpec.account || globalState.credentials.email;

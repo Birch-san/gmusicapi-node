@@ -37,7 +37,18 @@ The `gmusicapi` you `require()`d will expose to you some useful functions. Err, 
 ```js
 var gmusicapi = require('gmusicapi-node')();
 
+// check what functions are exported by this library
 console.log(gmusicapi);
+
+// all exported functions will be Promises
+gmusicapi.getPlaylists()
+.then(function(result) {
+	console.log(result);
+})
+.catch(function(error) {
+	console.error(error);	
+})
+.done();
 ```
 
 ### Options
