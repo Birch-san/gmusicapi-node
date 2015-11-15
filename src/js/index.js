@@ -16,16 +16,29 @@ function init(options) {
 		},
 		pyshellOptions: {},
 	}, options);
+
+	if (globalState.credentials.usekeychain) {
+		globalState.credentials.keychainSpec.account = globalState.credentials.keychainSpec.account
+		|| globalState.credentials.email;
+
+		if (!globalState.credentials.keychainSpec.account) {
+			throw new Error("No `account` specified in `options.credentials.keychainSpec`!");
+		}
+		if (!globalState.credentials.keychainSpec.service) {
+			throw new Error("No `service` specified in `options.credentials.keychainSpec`!");
+		}
+		if (!globalState.credentials.keychainSpec.type) {
+			throw new Error("No `type` specified in `options.credentials.keychainSpec`!");
+		}
+	}
 }
 
 var sanityCheckPromise;
-
-// var sanityChecked = false;
 function checkSanity() {
 	if (globalState.skipSanityChecks) {
 		sanityCheckPromise = Promise.resolve();
 	}
-	
+
 	if (!sanityCheckPromise) {
 		sanityCheckPromise = require('./checks/sanityCheck')()
 		.then(require('./checks/versionCheck'))
@@ -37,22 +50,44 @@ function checkSanity() {
 	return sanityCheckPromise;
 }
 
-var passwordGotten = false;
+var passwordPromise;
 function getPassword() {
-	if (passwordGotten) {
-		return Promise.resolve();
+	if (!globalState.credentials.usekeychain) {
+		passwordPromise = Promise.resolve();
 	}
-	return new Promise(function(resolve, reject) {
-		keychain.getPassword(globalState.credentials.keychainSpec, function(err, password) {
-			if (err) {
-				reject(err);
-				return;
-			}
-			globalState.credentials.password = password;
+	if (!passwordPromise) {
+		passwordPromise = new Promise(function(resolve, reject) {
+			keychain.getPassword(globalState.credentials.keychainSpec, function(err, password) {
+				if (err) {
+					reject(err);
+					return;
+				}
+				globalState.credentials.password = password;
+				globalState.credentials.email = globalState.credentials.email
+				|| globalState.credentials.keychainSpec.account;
 
+				resolve();
+			});
+		});
+	}
+
+	return passwordPromise;
+}
+
+var checkCredentials;
+function checkCredentials() {
+	if (!checkCredentials) {
+		checkCredentials = new Promise(function(resolve, reject) {
+			if (!globalState.credentials.email) {
+				reject(new Error("No `email` was found within the `options.credentials` object."));
+			}
+			if (!globalState.credentials.password) {
+				reject(new Error("No `password` was found within the `options.credentials` object."));
+			}
 			resolve();
 		});
-	})
+	}
+	return checkCredentials;
 }
 
 module.exports = function(options) {
@@ -60,40 +95,14 @@ module.exports = function(options) {
 
 	var bindings = require('./bindings');
 
-	var returnedBindings = bindings;
-
-	returnedBindings = _.mapValues(returnedBindings, function(binding) {
+	var returnedBindings = _.mapValues(bindings, function(binding) {
 		return function() {
 			return checkSanity()
-			.then(function() {
-				return binding.apply(binding, arguments);
-			})
+			.then(getPassword)
+			.then(checkCredentials)
+			.then(binding)
 		}
 	});
-
-	if (globalState.credentials.usekeychain) {
-		globalState.credentials.keychainSpec.account = globalState.credentials.keychainSpec.account || globalState.credentials.email;
-
-		if (!globalState.credentials.keychainSpec.account) {
-			throw new Error("No `account` specified in `options.credentials.keychainSpec`!");
-		}
-		if (!globalState.credentials.keychainSpec.service) {
-			throw new Error("No `service` specified in `options.credentials.keychainSpec`!");
-		}
-		if (!globalState.credentials.keychainSpec.type) {
-			throw new Error("No `type` specified in `options.credentials.keychainSpec`!");
-		}
-
-		returnedBindings = _.mapValues(returnedBindings, function(binding) {
-			return function() {
-				return getPassword()
-				.then(function() {
-					return binding.apply(binding, arguments);
-				});
-
-			}
-		});
-	}
 
 	return returnedBindings;
 };
