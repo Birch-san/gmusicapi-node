@@ -12,6 +12,6 @@
     "bluebird": "^3.0.5",
     "keychain": "0.0.4",
     "lodash": "^3.10.1",
-    "python-shell": "^0.2.0"
+    "python-shell": "git+ssh://git@github.com/ClimbsRocks/python-shell.git#38a07166dd4c9ead5a5bd6bd7ede4b3c6c529235"
   }
 }
