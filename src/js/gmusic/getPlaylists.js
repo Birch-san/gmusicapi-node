@@ -21,21 +21,88 @@ module.exports = function getPlaylists() {
 			}
 		});
 
-		pyshell
-		.on('message', function() {
-			console.log(arguments);
-		})
-		.send({
-			email: globalState.credentials.email,
-			password: globalState.credentials.password
-		})
-		.end(function(err) {
+		function endMessage(err) {
 			if (err) {
 				reject(err);
 				return;
 			}
-			// console.log(arguments);
-		});
+		}
+
+		// function ender(err) {
+		// 	if (err) {
+		// 		reject(err);
+		// 		return;
+		// 	}
+		// 	// resolve();
+		// };
+
+		// function pyEnder(err) {
+		// 	if (err) {
+		// 		reject(new Error(err));
+		// 	}
+		// 	pyshell.end(ender);
+		// }
+
+		pyshell
+		.on('close', function(err) {
+			if (err) {
+				reject(err);
+				return;
+			}
+			resolve();
+		})
+		.on('error', function(err) {
+			reject(err);
+		})
+		.on('message', function(response) {
+			// var parsed;
+			// try {
+			// 	parsed = JSON.parse(response);
+			// } catch(err) {
+			// 	pyEnder("JSON parse failure.");
+			// 	return;
+			// }
+
+			var parsed = response;
+
+			console.log("response: ", parsed);
+			if (!parsed.nature) {
+				console.error("Response from Python did not conform to agreed protocol.");
+					pyshell
+					.end(endMessage);
+				return;
+			}
+			switch(parsed.nature) {
+				case 'ACK':
+					switch(parsed.action) {
+						case 'credentials':
+							console.log("cred", parsed);
+							pyshell.send({
+								action: 'act'
+							})
+							.end(endMessage);
+							break;
+						case 'act':
+							console.log("act", parsed);
+							pyshell
+							.end(endMessage);
+							resolve();
+						break;
+					}
+					break;
+				case 'error':
+					console.error(util.format("Python script ended with error: %s", parsed.reason));
+					pyshell
+					.end(endMessage);
+					return;
+			}
+		})
+		.send({
+			action: 'credentials',
+			email: globalState.credentials.email,
+			password: globalState.credentials.password
+		})
+		.end(endMessage);
 
 	});
 };
