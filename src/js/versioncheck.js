@@ -8,12 +8,12 @@ var repoRoot = path.resolve(__dirname, '../../');
 
 var srcDir = path.resolve(repoRoot, 'src');
 var pyDir = path.resolve(srcDir, 'py');
-var pathToPythonScript = path.resolve(pyDir, 'sanitycheck.py');
+var pathToPythonScript = path.resolve(pyDir, 'versioncheck.py');
 
 worker
 .enqueue(new Promise(function(resolve, reject) {
 	function qualifyNominalError(nominalErrorText) {
-		return util.format("Sanity check failed; %s",
+		return util.format("Version check failed; %s",
 			nominalErrorText
 			);
 	}
@@ -30,9 +30,8 @@ worker
 				actualMessage
 				)));
 		}
-		require('./versioncheck')
-		resolve();
-		console.log('Sanity check succeeded; was able to invoke trivial Python script');
+
+		
 	}
 
 	var generalErrorText = qualifyNominalError("was unable to invoke trivial Python script.");

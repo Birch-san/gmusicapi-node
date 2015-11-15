@@ -2,7 +2,7 @@ var PythonShell = require('python-shell');
 var pathRelToCwd = require('./pathRelToCwd');
 var whenError = require('./whenError');
 
-module.exports = function(pathRelToRepoRoot, resultCallback) {
+module.exports = function(pathRelToRepoRoot, resultCallback, generalErrorText) {
 	var shellOptions = {};
 
 	var relativePath = pathRelToCwd(pathRelToRepoRoot);
@@ -11,7 +11,7 @@ module.exports = function(pathRelToRepoRoot, resultCallback) {
 		shellOptions,
 		function (err, results) {
 		if (err) {
-			whenError(err);
+			whenError(err, generalErrorText);
 		}
 		resultCallback(results);
 		// console.log('finished');
