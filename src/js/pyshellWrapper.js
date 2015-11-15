@@ -4,20 +4,27 @@ var pathRelToCwd = require('./pathRelToCwd');
 var whenError = require('./whenError');
 var globalState = require('./globalState');
 
-module.exports = function(pathRelToRepoRoot, resultCallback, generalErrorText, options) {
-	var shellOptions = _.extend({
-	}, options || {}, globalState.pyshellOptions);
+var pyshellWrapperHardMode = require('./pyshellWrapperHardMode');
 
-	var relativePath = pathRelToCwd(pathRelToRepoRoot);
-	return PythonShell.run(
-		relativePath,
-		shellOptions,
-		function (err, results) {
-		if (err) {
-			whenError.handle(err, generalErrorText);
-		}
-		resultCallback(results);
-		// console.log('finished');
-		}
-	);
+module.exports = function(pathRelToRepoRoot, resultCallback, generalErrorText, options) {
+	var config = {
+		options: options,
+		pathRelToRepoRoot: pathRelToRepoRoot
+	};
+
+	var output = [];
+	return pyshellWrapperHardMode(config)
+	.on('message', function (message) {
+        output.push(message);
+    })
+    .end(function (err) {
+        if (err) {
+        	whenError.handle(err, generalErrorText);
+        	return;
+        }
+
+        resultCallback(output.length
+        	? output
+        	: null);
+    });
 };

@@ -15,7 +15,10 @@ var pathToPythonScript = path.resolve(pyDir, 'gmusic/getPlaylists.py');
 module.exports = function getPlaylists() {
 	return new Promise(function(resolve, reject) {
 		var pyshell = pyshellWrapper({
-			pathRelToRepoRoot: pathToPythonScript
+			pathRelToRepoRoot: pathToPythonScript,
+			options: {
+				mode: 'json'
+			}
 		});
 
 		pyshell
