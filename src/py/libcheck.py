@@ -1,5 +1,18 @@
-from gmusicapi import Mobileclient
+import os, json
 
-api = Mobileclient()
+result = {}
 
-print api
+try:
+    import gmusicapi
+    result['outcome'] = 'success'
+except ImportError:
+	result['outcome'] = 'failure'
+
+	lookuppaths = []
+	try:
+	    lookuppaths = os.environ['PYTHONPATH'].split(os.pathsep)
+	except KeyError:
+		pass
+	result['lookuppaths'] = lookuppaths
+
+print json.dumps(result)

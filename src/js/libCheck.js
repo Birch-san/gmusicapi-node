@@ -14,7 +14,7 @@ var pathToPythonScript = path.resolve(pyDir, 'libcheck.py');
 worker
 .enqueue(new Promise(function(resolve, reject) {
 	function qualifyNominalError(nominalErrorText) {
-		return util.format("gmusicapi import failed; %s",
+		return util.format("Python `gmusicapi` import failed; %s",
 			nominalErrorText
 			);
 	}
@@ -23,21 +23,37 @@ worker
 		if (!results) {
 			throw new Error(qualifyNominalError("empty response received from Python script."));
 		}
-		var expectedObj = {'sup': 'yo'};
-		var actualMessage = results[0];
-		if (!actualMessage) {
+
+		var result = results[0];
+		if (!result) {
 			throw new Error(qualifyNominalError("no message received from Python script."));
 		}
-		var unserialized = actualMessage;
-		if (!_.isEqual(expectedObj, unserialized)) {
-			throw new Error(qualifyNominalError(util.format("unexpected object unserialized from Python script.\nExpected to equal: %s; received: %s.",
-				JSON.stringify(expectedObj),
+
+		var outcomeKey = 'outcome';
+		var expectedKey = outcomeKey;
+		if (!_.has(result, expectedKey)) {
+			throw new Error(qualifyNominalError(util.format("unexpected object unserialized from Python script.\nExpected to contain key: '%s'; received: %s.",
+				expectedKey,
 				JSON.stringify(unserialized)
 				)));
 		}
+
+		var outcome = result[outcomeKey];
+		switch(outcome) {
+			case 'success':
+			break;
+			case 'failure':
+				throw new Error(qualifyNominalError(util.format("Python encountered ImportError when importing module `gmusicapi`.\nPython searches for modules in at least the directories described in the PYTHONPATH of the environment within which this file was invoked; these directories were found to be:\n[%s]",
+				result['lookuppaths'].join(", ")
+				)));
+			default:
+				throw new Error(qualifyNominalError(util.format("unexpected outcome described in object unserialized from Python script.\nExpected to be either 'success' or 'failure'; received: %s.",
+					outcome)
+				));
+		}
 		// require('./versioncheck')
 		resolve();
-		console.log('gmusicapi import succeeded; we are able to import the gmusicapi Python module.');
+		console.log('Python `gmusicapi` import succeeded; we are able to import the `gmusicapi` Python module.');
 	}
 
 	var generalErrorText = qualifyNominalError("was unable to invoke Python script.");
