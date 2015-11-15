@@ -9,15 +9,24 @@ module.exports = function(pathRelToRepoRoot, resultCallback, generalErrorText, o
 	}, options || {}, globalState.pyshellOptions);
 
 	var relativePath = pathRelToCwd(pathRelToRepoRoot);
-	return PythonShell.run(
-		relativePath,
-		shellOptions,
-		function (err, results) {
-		if (err) {
-			whenError.handle(err, generalErrorText);
-		}
-		resultCallback(results);
-		// console.log('finished');
-		}
-	);
+
+
+	var pyshell = new PythonShell(relativePath, shellOptions);
+
+    var output = [];
+
+    return pyshell
+    .on('message', function (message) {
+        output.push(message);
+    })
+    .end(function (err) {
+        if (err) {
+        	whenError.handle(err, generalErrorText);
+        	return;
+        }
+
+        resultCallback(output.length
+        	? output
+        	: null);
+    });
 };
