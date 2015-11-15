@@ -9,9 +9,9 @@ The main reason for using this Node module is to stubbornly avoid learning Pytho
 ## Python
 I assume (moreorless arbitrarily) that `gmusicapi` depends on Python 2.7. At the time of writing, [I see that Python 3 is not supported](https://github.com/simon-weber/gmusicapi/pull/312).
 
-I enforce that Major version must `== 2`, and Minor version must `>= 7`. You may have other Python executables available. For now I perform my version check upon whichever one the NodeJS [`python-shell`](https://github.com/extrabacon/python-shell) chooses.
+I enforce that Major version must `== 2`, and Minor version must `>= 7`. You may have other Python executables available. For now I perform my version check upon whichever Python the NodeJS [`python-shell`](https://github.com/extrabacon/python-shell) chooses.
 
-## Pip
+## `gmusicapi` Python module
 [`gmusicapi` recommends](https://unofficial-google-music-api.readthedocs.org/en/latest/usage.html#usage) installing itself via [`pip`](https://pip.pypa.io/en/latest/), which is a Python package manager.
 
 You would use `pip` to acquire the `gmusicapi` Python module.
