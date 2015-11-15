@@ -54,6 +54,14 @@ Instructions [here](https://unofficial-google-music-api.readthedocs.org/en/lates
 pip install gmusicapi
 ```
 
+In particular, you are looking for these lines:
+
+```
+Installing collected packages: gmusicapi
+  Running setup.py install for gmusicapi
+Successfully installed gmusicapi-7.0.0
+```
+
 #### Extras
 If you intend to use the "upload music" APIs, you will need a way to transcode audio. For example `ffmpeg` or similar. Ensure that whatever you install for this purpose, is exposed on your PATH.
 
@@ -84,6 +92,17 @@ Location: /usr/local/lib/python2.7/site-packages
 
 Note the `Location: /usr/local/lib/python2.7/site-packages`; this is where your package is installed.
 
+Look inside that `Location`.
+
+You should have a `gmusicapi` folder and an `.egg-info` folder:
+
+```
+/usr/local/lib/python2.7/site-packages/gmusicapi
+/usr/local/lib/python2.7/site-packages/gmusicapi-7.0.0-py2.7.egg-info
+```
+
+If you have no `gmusicapi` folder, then setup did not run upon this egg. Uninstalling and reinstalling `gmusicapi` may help.
+
 #### Second pass
 Check whether you are capable now of importing gmusicapi
 
@@ -91,8 +110,9 @@ Check whether you are capable now of importing gmusicapi
 python -c "from gmusicapi import Mobileclient"
 ```
 
-If it blows up, then you've got a problem. 
-Fix that before continuing to use this Node library.
+If the output is empty: great!
+
+If it blows up: you've got a problem. Fix that before continuing to use this Node library.
 
 For example, if you get:
 
@@ -104,7 +124,7 @@ ImportError: No module named gmusicapi
 
 Then the `gmusicapi` module was not installed under any of the module search paths which your Python environment inspects.
 
-##### Well, which search paths is it inspecting?
+##### Well, which search paths is Python inspecting?
 ###### Mac (or any BSD system)
 You can watch which file handles are being opened by the kernel.
 
@@ -116,7 +136,7 @@ sudo opensnoop | grep gmusicapi
 
 You'll see the directories in which Python tries (and fails with `-1`) to search for your module.
 
-Or you'll see a huge stream of errors because you're on El Capitan. Fix [like so](http://apple.stackexchange.com/a/208763) (requires reboot).
+Or you'll see a huge stream of errors because you're on El Capitan. Fix [like so](http://apple.stackexchange.com/a/208763) (requires recovery reboot).
 
 ###### Windows
 Same as above, but use [Windows Sysinternals' `ProcMon`](https://technet.microsoft.com/en-us/sysinternals/processmonitor.aspx), and filter to Paths which contain `gmusicapi`.
