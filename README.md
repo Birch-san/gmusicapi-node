@@ -121,6 +121,24 @@ Or you'll see a huge stream of errors because you're on El Capitan. Fix [like so
 ###### Windows
 Same as above, but use [Windows Sysinternals' `ProcMon`](https://technet.microsoft.com/en-us/sysinternals/processmonitor.aspx), and filter to Paths which contain `gmusicapi`.
 
+##### How do I make it search in more places?
+Recall from when you ran:
+
+```bash
+pip show gmusicapi
+```
+
+You identified where the `gmusicapi` module was installed (i.e. the `Location` that was dumped). You need to add that to your `PYTHONPATH`.
+
+Ensure that this environment variable is set whenever a login shell launches (i.e. add to your `~/.bash_profile`):
+```bash
+export PYTHONPATH="$PYTHONPATH:/usr/local/lib/python2.7/site-packages"
+```
+
+To recruit these changes during the current `bash` session, source your profile:
+
+`source ~/.bash_profile`
+
 # Installation
 Install this Node package to your own Node project.
 
