@@ -1,1 +1,3 @@
-print 'yo'
+import sys
+
+print 'sup, yo'

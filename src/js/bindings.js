@@ -1,18 +1,4 @@
-var path = require('path');
-
-var repoRoot = path.resolve(__dirname, '../../');
-
-var srcDir = path.resolve(repoRoot, 'src');
-var pyDir = path.resolve(srcDir, 'py');
-var sanityChecker = path.resolve(pyDir, 'sanitycheck.py');
-
-var PythonShell = require('python-shell');
-
-function pathRelToCwd(absPath) {
-	return path.relative(process.cwd(), absPath);
-}
-
-var shellOptions = {};
+require('./sanitycheck');
 
 // var pyshell = new PythonShell(pathRelToCwd(sanityChecker));
 
@@ -28,16 +14,5 @@ var shellOptions = {};
 //   }
 //   console.log('finished');
 // });
-
-PythonShell.run(
-	pathRelToCwd(sanityChecker),
-	shellOptions,
-	function (err, results) {
-	if (err) {
-		throw err;
-	}
-	console.log(results);
-	console.log('finished');
-});
 
 module.exports = {};

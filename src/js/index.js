@@ -1,2 +1,2 @@
-module.exports = require('./bindings.js');
+module.exports = require('./bindings');
 
