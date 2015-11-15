@@ -27,9 +27,9 @@ function init(options) {
 		if (!globalState.credentials.keychainSpec.service) {
 			throw new Error("No `service` specified in `options.credentials.keychainSpec`!");
 		}
-		if (!globalState.credentials.keychainSpec.type) {
-			throw new Error("No `type` specified in `options.credentials.keychainSpec`!");
-		}
+		// if (!globalState.credentials.keychainSpec.type) {
+		// 	throw new Error("No `type` specified in `options.credentials.keychainSpec`!");
+		// }
 	}
 }
 

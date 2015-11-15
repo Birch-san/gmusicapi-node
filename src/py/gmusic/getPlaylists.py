@@ -12,8 +12,7 @@ for line in sys.stdin:
 
 	if action == 'getPlaylists':
 		api = Mobileclient()
-		# login = api.login(parsed['email'], parsed['password'], Mobileclient.FROM_MAC_ADDRESS)
-		login = False
+		login = api.login(parsed['email'], parsed['password'], Mobileclient.FROM_MAC_ADDRESS)
 
 		if not login:
 			print json.dumps({

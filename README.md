@@ -80,6 +80,30 @@ Option | type | Description
 ------ | ---- | -----------
 `logLevel` | `string` | Print to `console.log` various verbosity of messages from this library. Defaults to `"info"`. Possible values are: `["info"]`
 `skipSanityChecks` | `boolean` | Skip sanity checks on startup
+`credentials` | `object` | see `credentials` spec below
+
+`credentials`:
+
+Option | type | Description
+------ | ---- | -----------
+`usekeychain` | `boolean` | Consult Mac OS X Keychain for your Google account's password _instead_ of specifying `password`. Defaults to `false`.
+`email` | `string` | Your Google account
+`password` | `string` | Your Google password
+`keychainSpec` | `object` | see `keychainSpec` below
+
+`keychainSpec`:
+
+Option | type | Description
+------ | ---- | -----------
+`account` | `string` | Which Account to search for in Keychain (example: `you@gmail.com`). Defaults to the `email` provided in `credentials`.
+`service` | `string` | Which Service to search for in Keychain. Defaults to `'accounts.google.com'`.
+`type` | `string` | What type of password to search for in Keychain. Defaults to `'internet'`.
+
+You can populate your Keychain with a Google password like so:
+
+```bash
+security add-internet-password -a you@gmail.com -s accounts.google.com -w YOURPASSWORDHERE
+```
 
 # Development
 Check out this repository:
