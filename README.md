@@ -11,6 +11,19 @@ I assume (moreorless arbitrarily) that `gmusicapi` depends on Python 2.7. At the
 
 I enforce that Major version must `== 2`, and Minor version must `>= 7`. You may have other Python executables available. For now I perform my version check upon whichever Python the NodeJS [`python-shell`](https://github.com/extrabacon/python-shell) chooses.
 
+### Confirm `python` version
+Is the `python` on your PATH the one you are thinking of?
+
+```bash
+python -V
+```
+
+Expected output is something like:
+
+```
+Python 2.7.8
+```
+
 ## `gmusicapi` Python module
 [`gmusicapi` recommends](https://unofficial-google-music-api.readthedocs.org/en/latest/usage.html#usage) installing itself via [`pip`](https://pip.pypa.io/en/latest/), which is a Python package manager.
 
