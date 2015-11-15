@@ -1,18 +1,32 @@
-# Usage
-## Installation
+# Installation
 Install this Node package to your own Node project.
 
-### Via npm
+## Via npm
 Sorry, we're not on npm yet~
 
-### Via GitHub
+## Via GitHub
 Install this Node package:
 
 ```bash
 npm install git+ssh://git@github.com:Birch-san/gmusicapi-node.git
 ```
 
+# Usage
+## Inclusion
+Include the installed package into your Node script using `require()`.
+
+```js
+var gmusicapi = require('gmusicapi-node');
+```
+
 ## Invocation
+The `gmusicapi` you `require()`d will expose to you some useful functions. Err, one day.
+
+```js
+var gmusicapi = require('gmusicapi-node');
+
+console.log(gmusicapi);
+```
 
 # Development
 Check out this repository:
