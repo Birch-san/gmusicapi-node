@@ -26,6 +26,11 @@ Instructions [here](https://unofficial-google-music-api.readthedocs.org/en/lates
 pip install gmusicapi
 ```
 
+#### Extras
+If you intend to use the "upload music" APIs, you will need a way to transcode audio. For example `ffmpeg` or similar. Ensure that whatever you install for this purpose, is exposed on your PATH.
+
+You will want at least `libmp3lame` installed for use by your audio transcoder.
+
 ### Sanity check
 Wondering if `pip` has successfully installed `gmusicapi`? Ask it to show you what it installed:
 
@@ -47,11 +52,6 @@ Author-email: simon@simonmweber.com
 License: Copyright (c) 2015, Simon Weber
 Location: /usr/local/lib/python2.7/site-packages
 ```
-
-#### Extras
-If you intend to use the "upload music" APIs, you will need a way to transcode audio. For example `ffmpeg` or similar. Ensure that whatever you install for this purpose, is exposed on your PATH.
-
-You will want at least `libmp3lame` installed for use by your audio transcoder.
 
 # Installation
 Install this Node package to your own Node project.
