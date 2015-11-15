@@ -22,22 +22,26 @@ worker
 			throw new Error(qualifyNominalError("empty response received from trivial Python script."));
 		}
 
+		var help = "You can point to a different `python` executable by configuring `gmusicapi-node`'s `options` object to include a `pythonPath` pointing to your preferred Python executable.";
+
 		var expectedMajor = 2;
 		var actualMajor = +results[0];
 		if (actualMajor !== expectedMajor) {
-			throw new Error(qualifyNominalError(util.format("Python script was executed with a Major version of Python which we assert is unsupported by gmusicapi.\nExpected: %d; received: %d.",
+			throw new Error(qualifyNominalError(util.format("Python script was executed with a Major version of Python which we assert is unsupported by gmusicapi.\nExpected: %d; received: %d.\n%s",
 				expectedMajor,
-				actualMajor
+				actualMajor,
+				help
 				)));
 		}
 
 		var expectedMinor = 7;
 		var actualMinor = +results[1];
 		if (actualMinor < expectedMinor) {
-			throw new Error(qualifyNominalError(util.format("Python script (Major version %d) was executed with a Minor version of Python which we assert is unsupported by gmusicapi.\nExpected: >= %d; received: %d.",
+			throw new Error(qualifyNominalError(util.format("Python script (Major version %d) was executed with a Minor version of Python which we assert is unsupported by gmusicapi.\nExpected: >= %d; received: %d.\n%s",
 				actualMajor,
 				expectedMinor,
-				actualMinor
+				actualMinor,
+				help
 				)));
 		}
 

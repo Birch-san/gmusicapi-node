@@ -43,7 +43,7 @@ worker
 			case 'success':
 			break;
 			case 'failure':
-				throw new Error(qualifyNominalError(util.format("Python encountered ImportError when importing module `gmusicapi`.\nPython searches for modules in at least the directories described in the PYTHONPATH of the environment within which this file was invoked; these directories were found to be:\n[%s]",
+				throw new Error(qualifyNominalError(util.format("Python encountered ImportError when importing module `gmusicapi`.\nPython searches for modules in at least the directories described in the PYTHONPATH of the environment within which this file was invoked; these directories were found to be:\n[%s].\nYou can change this list of directories by configuring `gmusicapi-node`'s `options.pyshellOptions` object to include an `env` object containing a `PYTHONPATH`; see the README for details.",
 				result['lookuppaths'].join(", ")
 				)));
 			default:
