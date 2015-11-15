@@ -94,8 +94,35 @@ python -c "from gmusicapi import Mobileclient"
 If it blows up, then you've got a problem. 
 Fix that before continuing to use this Node library.
 
+For example, if you get:
+
+```
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ImportError: No module named gmusicapi
+```
+
+Then the `gmusicapi` module was not installed under any of the module search paths which your Python environment inspects.
+
+##### Well, which search paths is it inspecting?
+###### Mac (or any BSD system)
+You can watch which file handles are being opened by the kernel.
+
+Get this running in a Terminal window whilst your failing "import" script runs:
+
+```bash
+sudo opensnoop | grep gmusicapi
+```
+
+You'll see the directories in which Python tries (and fails with `-1`) to search for your module.
+
+Or you'll see a huge stream of errors because you're on El Capitan. Fix [like so](http://apple.stackexchange.com/a/208763) (requires reboot).
+
 # Installation
 Install this Node package to your own Node project.
+
+###### Windows
+Same as above, but use [Windows Sysinternals' `ProcMon`](https://technet.microsoft.com/en-us/sysinternals/processmonitor.aspx), and filter to Paths which contain `gmusicapi`.
 
 ## Via npm
 Sorry, we're not on npm yet~
