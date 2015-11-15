@@ -74,20 +74,22 @@ function getPassword() {
 	return passwordPromise;
 }
 
-var checkCredentials;
+var checkCredentialsPromise;
 function checkCredentials() {
-	if (!checkCredentials) {
-		checkCredentials = new Promise(function(resolve, reject) {
+	if (!checkCredentialsPromise) {
+		checkCredentialsPromise = new Promise(function(resolve, reject) {
 			if (!globalState.credentials.email) {
 				reject(new Error("No `email` was found within the `options.credentials` object."));
+				return;
 			}
 			if (!globalState.credentials.password) {
 				reject(new Error("No `password` was found within the `options.credentials` object."));
+				return;
 			}
 			resolve();
 		});
 	}
-	return checkCredentials;
+	return checkCredentialsPromise;
 }
 
 module.exports = function(options) {

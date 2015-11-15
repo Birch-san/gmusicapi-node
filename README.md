@@ -45,10 +45,7 @@ gmusicapi.getPlaylists()
 .then(function(result) {
 	console.log(result);
 })
-.catch(function(error) {
-	console.error(error);	
-})
-.done();
+.catch(console.error);
 ```
 
 ### Options
