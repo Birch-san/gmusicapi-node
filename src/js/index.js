@@ -10,7 +10,7 @@ function init(options) {
 			usekeychain: false,
 			keychainSpec: {
 				account: undefined,
-				service: 'https://accounts.google.com/ServiceLogin',
+				service: 'accounts.google.com',
 				type: 'internet'
 			}
 		},
@@ -31,6 +31,24 @@ function checkSanity() {
 	.catch(whenError.handle);
 }
 
+var passwordGotten = false;
+function getPassword() {
+	if (passwordGotten) {
+		return Promise.resolve();
+	}
+	return new Promise(function(resolve, reject) {
+		keychain.getPassword(globalState.credentials.keychainSpec, function(err, password) {
+			if (err) {
+				reject(err);
+				return;
+			}
+			globalState.credentials.password = password;
+
+			resolve();
+		});
+	})
+}
+
 module.exports = function(options) {
 	init(options || {});
 
@@ -39,7 +57,7 @@ module.exports = function(options) {
 	var returnedBindings = bindings;
 
 	if (!globalState.skipSanityChecks){
-		returnedBindings = _.mapValues(bindings, function(binding) {
+		returnedBindings = _.mapValues(returnedBindings, function(binding) {
 			return function() {
 				return checkSanity()
 				.then(function() {
@@ -50,6 +68,8 @@ module.exports = function(options) {
 	}
 
 	if (globalState.credentials.usekeychain) {
+		globalState.credentials.keychainSpec.account = globalState.credentials.keychainSpec.account || globalState.credentials.email;
+
 		if (!globalState.credentials.keychainSpec.account) {
 			throw new Error("No `account` specified in `options.credentials.keychainSpec`!");
 		}
@@ -60,11 +80,13 @@ module.exports = function(options) {
 			throw new Error("No `type` specified in `options.credentials.keychainSpec`!");
 		}
 
-		return new keychain.getPassword(globalState.credentials.keychainSpec, function(err, pass) {
-			if (err) {
-				console.error(err);
-			} else {
-				console.log(pass);
+		returnedBindings = _.mapValues(returnedBindings, function(binding) {
+			return function() {
+				return getPassword()
+				.then(function() {
+					return binding.apply(binding, arguments);
+				});
+
 			}
 		});
 	}
