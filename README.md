@@ -19,6 +19,21 @@ You would use `pip` to acquire the `gmusicapi` Python module.
 ### Install `pip`
 Instructions [here](https://pip.pypa.io/en/latest/installing/)
 
+#### Confirm `pip` version
+Does the `pip` on your PATH concern the correct version of Python?
+
+```bash
+pip -V
+```
+
+Expected output will look something like:
+
+```
+pip 7.1.2 from /usr/local/lib/python2.7/site-packages (python 2.7)
+```
+
+Note `python 2.7`, as required.
+
 ### Install `gmusicapi`
 Instructions [here](https://unofficial-google-music-api.readthedocs.org/en/latest/usage.html#usage), but essentially:
 
