@@ -28,21 +28,6 @@ module.exports = function getPlaylists() {
 			}
 		}
 
-		// function ender(err) {
-		// 	if (err) {
-		// 		reject(err);
-		// 		return;
-		// 	}
-		// 	// resolve();
-		// };
-
-		// function pyEnder(err) {
-		// 	if (err) {
-		// 		reject(new Error(err));
-		// 	}
-		// 	pyshell.end(ender);
-		// }
-
 		pyshell
 		.on('close', function(err) {
 			if (err) {
@@ -55,50 +40,28 @@ module.exports = function getPlaylists() {
 			reject(err);
 		})
 		.on('message', function(response) {
-			// var parsed;
-			// try {
-			// 	parsed = JSON.parse(response);
-			// } catch(err) {
-			// 	pyEnder("JSON parse failure.");
-			// 	return;
-			// }
-
-			var parsed = response;
-
-			console.log("response: ", parsed);
-			if (!parsed.nature) {
-				console.error("Response from Python did not conform to agreed protocol.");
-					pyshell
-					.end(endMessage);
+			console.log("response: ", response);
+			if (!response.outcome) {
+				reject("Response from Python did not conform to agreed protocol.");
 				return;
 			}
-			switch(parsed.nature) {
-				case 'ACK':
-					switch(parsed.action) {
-						case 'credentials':
-							console.log("cred", parsed);
-							pyshell.send({
-								action: 'act'
-							})
-							.end(endMessage);
-							break;
-						case 'act':
-							console.log("act", parsed);
-							pyshell
-							.end(endMessage);
-							resolve();
-						break;
-					}
+			switch(response.outcome) {
+				case 'success':
+					console.log("success: ", response);
 					break;
+				case 'failure':
+					reject(util.format("API request failed. Reason: %s", response.reason));
+					return;
 				case 'error':
-					console.error(util.format("Python script ended with error: %s", parsed.reason));
-					pyshell
-					.end(endMessage);
+					reject(util.format("Python script ended with error: %s", response.reason));
+					return;
+				default:
+					reject(util.format("Unrecognised outcome: %s", response.outcome));
 					return;
 			}
 		})
 		.send({
-			action: 'credentials',
+			action: 'getPlaylists',
 			email: globalState.credentials.email,
 			password: globalState.credentials.password
 		})
