@@ -118,11 +118,11 @@ You'll see the directories in which Python tries (and fails with `-1`) to search
 
 Or you'll see a huge stream of errors because you're on El Capitan. Fix [like so](http://apple.stackexchange.com/a/208763) (requires reboot).
 
-# Installation
-Install this Node package to your own Node project.
-
 ###### Windows
 Same as above, but use [Windows Sysinternals' `ProcMon`](https://technet.microsoft.com/en-us/sysinternals/processmonitor.aspx), and filter to Paths which contain `gmusicapi`.
+
+# Installation
+Install this Node package to your own Node project.
 
 ## Via npm
 Sorry, we're not on npm yet~
