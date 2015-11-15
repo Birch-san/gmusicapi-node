@@ -8,11 +8,11 @@ var self = {
 		return new Error(err);
 	},
 	prependToErrorMessage: function prependToErrorMessage(err, preamble) {
-		if (contextText) {
-			error.message = util.format(
+		if (preamble) {
+			err.message = util.format(
 				"%s Error message was:\n%s",
-				error.message,
-				contextText
+				err.message,
+				preamble
 				)
 		}
 	},

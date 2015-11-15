@@ -29,7 +29,11 @@ function checkSanity() {
 module.exports = function(options) {
 	init(options || {});
 
-	checkSanity();
+	if (!globalState.skipSanityChecks){
+		checkSanity();
+	}
 
-	return {};
+	return {
+		getPlaylists: require('./gmusic/getPlaylists')
+	};
 };

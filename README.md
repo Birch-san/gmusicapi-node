@@ -71,6 +71,7 @@ We also have options for:
 Option | type | Description
 ------ | ---- | -----------
 `logLevel` | `string` | Print to `console.log` various verbosity of messages from this library. Defaults to `"info"`. Possible values are: `["info"]`
+`skipSanityChecks` | `boolean` | Skip sanity checks on startup
 
 # Development
 Check out this repository:

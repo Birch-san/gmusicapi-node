@@ -14,7 +14,7 @@ module.exports = function(pathRelToRepoRoot, resultCallback, generalErrorText, o
 		shellOptions,
 		function (err, results) {
 		if (err) {
-			whenError(err, generalErrorText);
+			whenError.handle(err, generalErrorText);
 		}
 		resultCallback(results);
 		// console.log('finished');
