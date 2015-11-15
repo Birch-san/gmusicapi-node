@@ -1,5 +1,5 @@
 # Purpose
-This Node library should enable you to invoke functionality of Simon Weber's [Unofficial Google Music API, `gmusicapi`](https://github.com/simon-weber/gmusicapi) from Node.
+This Node library should enable you to invoke from Node the functionality of Simon Weber's [Unofficial Google Music API, `gmusicapi`](https://github.com/simon-weber/gmusicapi).
 
 It is _not_ a re-implementation; it binds to existing functionality from the Python module.
 
