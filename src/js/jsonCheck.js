@@ -28,14 +28,7 @@ worker
 		if (!actualMessage) {
 			throw new Error(qualifyNominalError("no message received from Python script."));
 		}
-
-		var unserialized;
-		try {
-		 	unserialized = JSON.parse(actualMessage);
-		} catch(err) {
-			var qualifiedError = whenError.prependToErrorMessage(err, qualifyNominalError("malformed JSON received from Python script."));
-			throw qualifiedError;
-		}
+		var unserialized = actualMessage;
 		if (!_.isEqual(expectedObj, unserialized)) {
 			throw new Error(qualifyNominalError(util.format("unexpected object unserialized from Python script.\nExpected to equal: %s; received: %s.",
 				JSON.stringify(expectedObj),
@@ -49,5 +42,9 @@ worker
 
 	var generalErrorText = qualifyNominalError("was unable to invoke Python script.");
 
-	pyshellWrapper(pathToPythonScript, resultCallback, generalErrorText);
+	var shellOptions = {
+		mode: 'json'
+	};
+
+	pyshellWrapper(pathToPythonScript, resultCallback, generalErrorText, shellOptions);
 }));
