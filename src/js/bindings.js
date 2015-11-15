@@ -1,3 +1,3 @@
 module.exports = {
-	getPlaylists: require('./gmusic/getPlaylists')
+	acquireMobileClient: require('./gmusic/clients/MobileClient/acquire')
 };
