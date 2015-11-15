@@ -4,4 +4,5 @@ import sys, json
 # api = Mobileclient()
 # api.login('user@gmail.com', 'my-password', Mobileclient.FROM_MAC_ADDRESS)
 
-print json.dumps(sys.argv[1])
+for line in sys.stdin:
+  print json.dumps(json.loads(line))

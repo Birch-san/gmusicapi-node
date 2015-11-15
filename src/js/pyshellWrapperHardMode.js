@@ -4,29 +4,35 @@ var pathRelToCwd = require('./pathRelToCwd');
 var whenError = require('./whenError');
 var globalState = require('./globalState');
 
-module.exports = function(pathRelToRepoRoot, resultCallback, generalErrorText, options) {
+module.exports = function(config) {
 	var shellOptions = _.extend({
-	}, options || {}, globalState.pyshellOptions);
+        mode: 'json'
+	}, config.options || {},
+    globalState.pyshellOptions);
 
-	var relativePath = pathRelToCwd(pathRelToRepoRoot);
+    // var sendToPython = _.extend({}, config.pythonMessageObj || {});
 
+    // config.onEndError = config.onEndError || function() {};
+    // config.onMessage = config.onMessage || function() {};
+    // config.onDone = config.onDone || function() {};
 
-	var pyshell = new PythonShell(relativePath, shellOptions);
+    var relativePath = pathRelToCwd(config.pathRelToRepoRoot);
+
+    var pyshell = new PythonShell(relativePath, shellOptions);
 
     var output = [];
 
-    return pyshell
-    .on('message', function (message) {
-        output.push(message);
-    })
-    .end(function (err) {
-        if (err) {
-        	whenError.handle(err, generalErrorText);
-        	return;
-        }
+    // pyshell.send(sendToPython);
 
-        resultCallback(output.length
-        	? output
-        	: null);
-    });
+    // .on('message', config.onMessage)
+    // .end(function (err) {
+    //     if (err) {
+    //         config.onEndError();
+    //         return;
+    //     }
+
+    //     config.onDone();
+    // });
+
+    return pyshell
 };
