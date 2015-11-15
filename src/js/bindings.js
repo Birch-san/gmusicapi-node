@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var globalState = require('./globalState');
 
 // var pyshell = new PythonShell(pathRelToCwd(sanityChecker));
@@ -15,9 +16,10 @@ var globalState = require('./globalState');
 //   console.log('finished');
 // });
 
-
-function init(pyshellOptions) {
-	globalState.pyshellOptions = pyshellOptions;
+function init(options) {
+	_.merge(globalState, {
+		logLevel: 'info'
+	}, options);
 }
 
 function checkSanity() {
@@ -25,8 +27,7 @@ function checkSanity() {
 }
 
 module.exports = function(options) {
-	options = options || {}
-	init(options.pyshellOptions || {});
+	init(options || {});
 
 	checkSanity();
 

@@ -3,6 +3,7 @@ var util = require('util');
 var _ = require('lodash');
 var pyshellWrapper = require('../pyshellWrapper');
 var worker = require('../worker');
+var flog = require('../flog');
 
 var repoRoot = path.resolve(__dirname, '../../../');
 
@@ -52,7 +53,7 @@ worker
 		}
 		// require('./versioncheck')
 		resolve();
-		console.log('Python `gmusicapi` import succeeded; we are able to import the `gmusicapi` Python module.');
+		flog.info('Python `gmusicapi` import succeeded; we are able to import the `gmusicapi` Python module.');
 	}
 
 	var generalErrorText = qualifyNominalError("was unable to invoke Python script.");

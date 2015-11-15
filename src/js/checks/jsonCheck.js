@@ -3,6 +3,7 @@ var util = require('util');
 var _ = require('lodash');
 var pyshellWrapper = require('../pyshellWrapper');
 var worker = require('../worker');
+var flog = require('../flog');
 
 var repoRoot = path.resolve(__dirname, '../../../');
 
@@ -36,7 +37,7 @@ worker
 		}
 		require('./libCheck')
 		resolve();
-		console.log('JSON unserialization check succeeded; we are able to correctly unserialize JSON provided by Python');
+		flog.info('JSON unserialization check succeeded; we are able to correctly unserialize JSON provided by Python');
 	}
 
 	var generalErrorText = qualifyNominalError("was unable to invoke Python script.");

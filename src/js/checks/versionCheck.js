@@ -1,7 +1,9 @@
 var path = require('path');
 var util = require('util');
+
 var pyshellWrapper = require('../pyshellWrapper');
 var worker = require('../worker');
+var flog = require('../flog');
 
 var repoRoot = path.resolve(__dirname, '../../../');
 
@@ -45,10 +47,10 @@ worker
 				)));
 		}
 
-		console.log(util.format('Python version check succeeded; we are executing this script with a supported version of Python (we support ~2.7). You provided %d.%d.',
+		flog.info('Python version check succeeded; we are executing this script with a supported version of Python (we support ~2.7). You provided %d.%d.',
 			actualMajor,
 			actualMinor
-			));
+			);
 		require('./jsonCheck')
 		resolve();
 	}

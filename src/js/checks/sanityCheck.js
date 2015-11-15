@@ -2,6 +2,7 @@ var path = require('path');
 var util = require('util');
 var pyshellWrapper = require('../pyshellWrapper');
 var worker = require('../worker');
+var flog = require('../flog');
 
 var repoRoot = path.resolve(__dirname, '../../../');
 
@@ -31,7 +32,7 @@ worker
 		}
 		require('./versionCheck')
 		resolve();
-		console.log('Sanity check succeeded; was able to invoke Python script');
+		flog.info('Sanity check succeeded; was able to invoke Python script');
 	}
 
 	var generalErrorText = qualifyNominalError("was unable to invoke Python script.");

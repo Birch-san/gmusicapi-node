@@ -49,7 +49,7 @@ You can assign a `string` to `pyshellOptions.pythonPath` to specify the path to 
 
 You can assign an `object` of key-value pairs to `pyshellOptions.env` to provide environment variables to `child_process.spawn`.
 
-Here's an example:
+Here's an example of that:
 
 ```js
 var options = {
@@ -65,6 +65,12 @@ var options = {
 
 var lib = require('../src/js/index')(options);
 ```
+
+We also have options for:
+
+Option | type | Description
+------ | ---- | -----------
+`logLevel` | `string` | Print to `console.log` various verbosity of messages from this library. Defaults to `"info"`. Possible values are: `["info"]`
 
 # Development
 Check out this repository:
