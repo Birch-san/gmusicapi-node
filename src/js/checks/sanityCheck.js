@@ -1,13 +1,13 @@
 var path = require('path');
 var util = require('util');
-var pyshellWrapper = require('./pyshellWrapper');
-var worker = require('./worker');
+var pyshellWrapper = require('../pyshellWrapper');
+var worker = require('../worker');
 
-var repoRoot = path.resolve(__dirname, '../../');
+var repoRoot = path.resolve(__dirname, '../../../');
 
 var srcDir = path.resolve(repoRoot, 'src');
 var pyDir = path.resolve(srcDir, 'py');
-var pathToPythonScript = path.resolve(pyDir, 'sanitycheck.py');
+var pathToPythonScript = path.resolve(pyDir, 'checks/sanityCheck.py');
 
 worker
 .enqueue(new Promise(function(resolve, reject) {
@@ -29,7 +29,7 @@ worker
 				actualMessage
 				)));
 		}
-		require('./versioncheck')
+		require('./versionCheck')
 		resolve();
 		console.log('Sanity check succeeded; was able to invoke Python script');
 	}

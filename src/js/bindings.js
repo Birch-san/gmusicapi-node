@@ -21,7 +21,7 @@ function init(pyshellOptions) {
 }
 
 function checkSanity() {
-	require('./sanitycheck');
+	require('./checks/sanityCheck');
 }
 
 module.exports = function(options) {
