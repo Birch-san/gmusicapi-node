@@ -9,6 +9,8 @@
   "author": "Alex Birch",
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^3.0.5",
+    "lodash": "^3.10.1",
     "python-shell": "^0.2.0"
   }
 }
