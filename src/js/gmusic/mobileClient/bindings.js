@@ -12,5 +12,7 @@ module.exports = function(daemon) {
 	// 	return Promise.resolve();
 	// });
 
-	return {};
+	return {
+		done: daemon.done
+	};
 };

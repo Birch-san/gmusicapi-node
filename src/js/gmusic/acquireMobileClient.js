@@ -1,6 +1,6 @@
 var Promise = require('bluebird');
-var Queue = require('promise-queue');
-Queue.configure(Promise);
+// var Queue = require('promise-queue');
+// Queue.configure(Promise);
 var path = require('path');
 var util = require('util');
 var _ = require('lodash');
@@ -23,17 +23,19 @@ module.exports = function() {
 		}
 	});
 
-	var maxConcurrent = 1;
-	var maxQueue = Infinity;
-	var queue = new Queue(maxConcurrent, maxQueue);
-
 	var daemon = {
 		currentAction: undefined,
 		deferred: undefined,
-		sendMessage: function(deferred, message) {
-			return queue.add(function() {
+		done: function() {
+			var deferred = Promise.pending();
+			pyshell.end(deferred.resolve.bind(deferred));
+			return deferred.promise;
+		},
+		sendMessage: function(message) {
+			return ((daemon.deferred && daemon.deferred.promise) || Promise.resolve())
+			.then(function() {
 				daemon.currentAction = message.action;
-				daemon.deferred = deferred;
+				daemon.deferred = Promise.pending();
 
 				pyshell.send(message);
 
@@ -106,11 +108,9 @@ module.exports = function() {
 		}
 	});
 
-	daemon.sendMessage(Promise.pending(), {
+	return daemon.sendMessage({
 		action: "open",
 		email: globalState.credentials.email,
 		password: globalState.credentials.password
 	});
-
-	return queue;
 };
