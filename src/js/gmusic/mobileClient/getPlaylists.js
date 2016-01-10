@@ -3,11 +3,11 @@ var util = require('util');
 var _ = require('lodash');
 
 module.exports = {
-	successHandler: function(response) {
+	onSuccess: function(response) {
 		console.log("getPlaylists success: ", response);
 	},
-	failureHandler: function(response) {
-		console.log("getPlaylists failure: ", response);
+	onFail: function(err) {
+		console.log("getPlaylists failure: ", err.detail);
 	},
 	act: function() {
 		return {

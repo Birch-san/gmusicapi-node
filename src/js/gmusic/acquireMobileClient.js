@@ -55,6 +55,7 @@ module.exports = function() {
 	.on('close', function(err) {
 		if (err) {
 			daemon.deferred.reject({
+				nature: 'error',
 				err: err
 			});
 			return;
@@ -65,6 +66,7 @@ module.exports = function() {
 	})
 	.on('error', function(err) {
 		daemon.deferred.reject({
+			nature: 'error',
 			err: err
 		});
 	})
@@ -72,7 +74,8 @@ module.exports = function() {
 		console.log("response: ", response);
 		if (!response.outcome) {
 			daemon.deferred.reject({
-				err: "Response from Python did not conform to agreed protocol."
+				nature: 'error',
+				err: util.format("Response from Python did not conform to agreed protocol; expected object including \"outcome\" key, but instead received object: <%s>.", JSON.stringify(response, null, " "))
 			});
 			return;
 		}
@@ -81,6 +84,7 @@ module.exports = function() {
 			break;
 			default:
 			daemon.deferred.reject({
+				nature: 'error',
 				err: util.format("Daemon broke protocol by replying regarding an action '%s', which differs from the action currently enqueued ('%s').", response.action, daemon.currentAction)
 			});
 		}
@@ -92,16 +96,20 @@ module.exports = function() {
 				break;
 			case 'failure':
 				daemon.deferred.reject({
-					err: util.format("API request failed. Reason: %s", response.reason)
+					nature: 'failure',
+					err: util.format("API request failed. Detail: %s", response.reason),
+					detail: response.reason
 				});
 				return;
 			case 'error':
 				daemon.deferred.reject({
+					nature: 'error',
 					err: util.format("Python script ended with error: %s", response.reason)
 				});
 				return;
 			default:
 				daemon.deferred.reject({
+					nature: 'error',
 					err: util.format("Unrecognised outcome: %s", response.outcome)
 				});
 				return;

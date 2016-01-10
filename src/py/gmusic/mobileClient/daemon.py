@@ -25,6 +25,7 @@ def makeError(action, reason):
 	ended = True
 	return {
 		'action': action,
+		'outcome': 'error',
 		'reason': reason
 	}
 
@@ -41,7 +42,7 @@ def handleOpen(obj, myDaemon):
 		response['whatever'] = myDaemon.getGmusic()
 		return response;
 
-	return makeError("Unrecognised 'open' form.")
+	return makeError('open', "Unrecognised 'open' form.")
 
 def handleAction(obj, myDaemon):
 	if 'action' not in obj:
