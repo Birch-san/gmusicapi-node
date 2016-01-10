@@ -1,4 +1,6 @@
 var Promise = require('bluebird');
+var Queue = require('promise-queue');
+Queue.configure(Promise);
 var path = require('path');
 var util = require('util');
 var _ = require('lodash');
@@ -13,97 +15,102 @@ var pyDir = path.resolve(srcDir, 'py');
 var pathToPythonScript = path.resolve(pyDir, 'gmusic/mobileClient/daemon.py');
 // console.log(pathToPythonScript);
 
-module.exports = function getPlaylists() {
-	return new Promise(function(resolve, reject) {
-		var pyshell = pyshellWrapper({
-			pathRelToRepoRoot: pathToPythonScript,
-			options: {
-				mode: 'json'
-			}
-		});
-
-		function endMessage(err) {
-			if (err) {
-				reject(err);
-				return;
-			}
+module.exports = function() {
+	var pyshell = pyshellWrapper({
+		pathRelToRepoRoot: pathToPythonScript,
+		options: {
+			mode: 'json'
 		}
+	});
 
-		var shellState = {
-			currentAction: "open"
-		};
+	var maxConcurrent = 1;
+	var maxQueue = Infinity;
+	var queue = new Queue(maxConcurrent, maxQueue);
 
-		pyshell
-		.on('close', function(err) {
-			if (err) {
-				reject({
-					action: "close",
-					err: err
-				});
-				return;
-			}
-			resolve({
-				action: "close"
+	var daemon = {
+		currentAction: undefined,
+		deferred: undefined,
+		sendMessage: function(deferred, message) {
+			return queue.add(function() {
+				daemon.currentAction = message.action;
+				daemon.deferred = deferred;
+
+				pyshell.send(message);
+
+				return daemon.deferred.promise;
 			});
-		})
-		.on('error', function(err) {
-			reject({
-				action: shellState.currentAction,
+		}
+	};
+
+	function endMessage(err) {
+		if (err) {
+			daemon.deferred.reject(err);
+			return;
+		}
+	}
+
+	pyshell
+	.on('close', function(err) {
+		if (err) {
+			daemon.deferred.reject({
 				err: err
 			});
-		})
-		.on('message', function(response) {
-			console.log("response: ", response);
-			if (!response.outcome) {
-				reject({
-					action: shellState.currentAction,
-					err: "Response from Python did not conform to agreed protocol."
+			return;
+		}
+		daemon.deferred.resolve({
+			action: "close"
+		});
+	})
+	.on('error', function(err) {
+		daemon.deferred.reject({
+			err: err
+		});
+	})
+	.on('message', function(response) {
+		console.log("response: ", response);
+		if (!response.outcome) {
+			daemon.deferred.reject({
+				err: "Response from Python did not conform to agreed protocol."
+			});
+			return;
+		}
+		switch(response.action) {
+			case daemon.currentAction:
+			break;
+			default:
+			daemon.deferred.reject({
+				err: util.format("Daemon broke protocol by replying regarding an action '%s', which differs from the action currently enqueued ('%s').", response.action, daemon.currentAction)
+			});
+		}
+		switch(response.outcome) {
+			case 'success':
+				console.log("success: ", response);
+				// daemon successfully initialized
+				daemon.deferred.resolve(require('./mobileClient/bindings')(daemon));
+				break;
+			case 'failure':
+				daemon.deferred.reject({
+					err: util.format("API request failed. Reason: %s", response.reason)
 				});
 				return;
-			}
-			switch(response.action) {
-				case shellState.currentAction:
-				break;
-				default:
-				reject({
-					action: shellState.currentAction,
-					err: util.format("Daemon broke protocol by replying regarding an action '%s', which differs from the action currently enqueued ('%s').", response.action, shellState.currentAction)
+			case 'error':
+				daemon.deferred.reject({
+					err: util.format("Python script ended with error: %s", response.reason)
 				});
-			}
-			switch(response.outcome) {
-				case 'success':
-					console.log("success: ", response);
-					// daemon successfully initialized
-					resolve({
-						action: shellState.currentAction,
-						shell: pyshell
-					});
-					break;
-				case 'failure':
-					reject({
-						action: shellState.currentAction,
-						err: util.format("API request failed. Reason: %s", response.reason)
-					});
-					return;
-				case 'error':
-					reject({
-						action: shellState.currentAction,
-						err: util.format("Python script ended with error: %s", response.reason)
-					});
-					return;
-				default:
-					reject({
-						action: shellState.currentAction,
-						err: util.format("Unrecognised outcome: %s", response.outcome)
-					});
-					return;
-			}
-		})
-		.send({
-			action: shellState.currentAction,
-			email: globalState.credentials.email,
-			password: globalState.credentials.password
-		});
-
+				return;
+			default:
+				daemon.deferred.reject({
+					err: util.format("Unrecognised outcome: %s", response.outcome)
+				});
+				return;
+		}
 	});
+
+	daemon.sendMessage(Promise.pending(), {
+		action: "open",
+		email: globalState.credentials.email,
+		password: globalState.credentials.password
+	});
+
+	return queue;
 };
