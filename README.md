@@ -61,20 +61,20 @@ Example output:
 
 ```json
 [
-{
-	kind: 'sj#playlist',
-	name: 'かたわ少女',
-	deleted: false,
-	lastModifiedTimestamp: '1412977187235428',
-	recentTimestamp: '1412977136104000',
-	shareToken: 'AMaBXykdBzHnRhaVhtpIBrYu6UwQFgaZDOtFL1XTGmMAc6aOEJ4GKvk2ZIVRmPH3m0dZFbTElvznB3b6EcA37NtD0IuHM_hU0w==',
-	clientId: '996CEDEF0DFAE259',
-	ownerProfilePhotoUrl: '(redacted)',
-	ownerName: '(redacted)',
-	accessControlled: false,
-	creationTimestamp: '1412977136108902',
-	id: '8bcfdbb5-b22e-3441-b815-a58d5b53afd9'
-}
+	{
+		"kind": "sj#playlist",
+		"name": "かたわ少女",
+		"deleted": false,
+		"lastModifiedTimestamp": "1412977187235428",
+		"recentTimestamp": "1412977136104000",
+		"shareToken": "AMaBXykdBzHnRhaVhtpIBrYu6UwQFgaZDOtFL1XTGmMAc6aOEJ4GKvk2ZIVRmPH3m0dZFbTElvznB3b6EcA37NtD0IuHM_hU0w==",
+		"clientId": "996CEDEF0DFAE259",
+		"ownerProfilePhotoUrl": "(redacted)",
+		"ownerName": "(redacted)",
+		"accessControlled": false,
+		"creationTimestamp": "1412977136108902",
+		"id": "8bcfdbb5-b22e-3441-b815-a58d5b53afd9"
+	}
 ]
 ```
 
