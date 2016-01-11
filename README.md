@@ -8,7 +8,9 @@ The main reason for using this Node module is to stubbornly avoid learning Pytho
 # Requirements
 `2.7 <= Python version < 3.0`
 
-You will need the Python `gmusicapi` to be working already. [Here's my instructions](Installing Python gmusicapi.md)!
+You will need the Python `gmusicapi` to be working already.
+
+[Here's my instructions](Installing Python gmusicapi.md)!
 
 # Installation
 Install this Node package to your own Node project.
