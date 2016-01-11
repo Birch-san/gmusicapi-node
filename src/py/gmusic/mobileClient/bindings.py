@@ -1,17 +1,12 @@
 def handleOpen(obj, myDaemon):
-	response = {
-		'action': 'open'
-	};
+	action = 'open'
 
 	email = obj['email'];
 	password = obj['password'];
 	if ('email' in obj):
-		myDaemon.setGmusic(None)
-		response['outcome'] = 'success'
-		response['whatever'] = myDaemon.getGmusic()
-		return response;
+		return myDaemon.connect(action, obj)
 
-	return myDaemon.makeError('open', "Unrecognised 'open' form.")
+	return myDaemon.makeError(action, "Unrecognised 'open' form.")
 
 def handleAction(obj, myDaemon):
 	if 'action' not in obj:

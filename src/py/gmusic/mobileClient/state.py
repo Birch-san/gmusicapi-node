@@ -1,10 +1,29 @@
+import json
+from gmusicapi import Mobileclient
+
 class Daemon():
 	def __init__(self):
-		self.rememberThis = 0
+		self.api = None
+		self.login = None
 		self.ended = False
 
-	def setGmusic(self, gmusic):
-		self.rememberThis += 1
+	def connect(self, action, credentials):
+		self.api = Mobileclient()
+		self.login = self.api.login(credentials['email'], credentials['password'], Mobileclient.FROM_MAC_ADDRESS)
+
+		if not self.login:
+			return {
+				'action': action,
+				'outcome': 'failure',
+				'reason': 'login',
+				'detail': json.dumps(self.login)
+				}
+
+		return {
+			'action': action,
+			'outcome': 'success',
+			'detail': json.dumps(self.login)
+			}
 
 	def getGmusic(self):
 		return self.rememberThis
