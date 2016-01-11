@@ -16,13 +16,15 @@ You will need the Python `gmusicapi` to be working already.
 Install this Node package to your own Node project.
 
 ## Via npm
-Sorry, we're not on npm yet~
+```bash
+npm install --save gmusicapi-node
+```
 
 ## Via GitHub
 Install this Node package:
 
 ```bash
-npm install git+ssh://git@github.com:Birch-san/gmusicapi-node.git
+npm install --save git+ssh://git@github.com:Birch-san/gmusicapi-node.git
 ```
 
 # Usage
