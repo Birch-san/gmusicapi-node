@@ -214,3 +214,31 @@ You're using [Sublime Text](https://www.sublimetext.com/3), right? Add a new bui
 ```
 
 Now when you press `Cmd+B` upon a `.js` file, it will run your fiddle.
+
+## Releases
+
+### `npm`
+
+#### Minor release
+
+Finish your commit, then run:
+
+```bash
+npm version patch
+npm publish
+git push origin master --follow-tags
+```
+
+Or run `sh ./npm-release-minor.sh`
+
+#### Major release
+
+Finish your commit, then run:
+
+```bash
+npm version major
+npm publish
+git push origin master --follow-tags
+```
+
+Or run `sh ./npm-release-major.sh`
