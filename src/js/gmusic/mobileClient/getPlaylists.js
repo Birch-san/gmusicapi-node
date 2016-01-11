@@ -4,7 +4,7 @@ var _ = require('lodash');
 
 module.exports = {
 	onSuccess: function(response) {
-		console.log("getPlaylists success: ", response);
+		return response;
 	},
 	onFail: function(err) {
 		console.log("getPlaylists failure: ", err.detail);

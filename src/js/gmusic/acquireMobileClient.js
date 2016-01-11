@@ -71,7 +71,7 @@ module.exports = function() {
 		});
 	})
 	.on('message', function(response) {
-		console.log("response: ", response);
+		// console.log("response: ", response);
 		if (!response.outcome) {
 			daemon.deferred.reject({
 				nature: 'error',
@@ -79,6 +79,7 @@ module.exports = function() {
 			});
 			return;
 		}
+
 		switch(response.action) {
 			case daemon.currentAction:
 			break;
@@ -90,9 +91,13 @@ module.exports = function() {
 		}
 		switch(response.outcome) {
 			case 'success':
-				console.log("success: ", response);
+				// console.log("success: ", response);
 				// daemon successfully initialized
-				daemon.deferred.resolve(require('./mobileClient/bindings')(daemon));
+				if (response.action === 'open') {
+					daemon.deferred.resolve(require('./mobileClient/bindings')(daemon));
+				} else {
+					daemon.deferred.resolve(response.payload);
+				}
 				break;
 			case 'failure':
 				daemon.deferred.reject({

@@ -25,8 +25,8 @@ class Daemon():
 			'detail': json.dumps(self.login)
 			}
 
-	def getGmusic(self):
-		return self.rememberThis
+	def getClient(self):
+		return self.api
 
 	def makeError(self, action, reason):
 		self.ended = True

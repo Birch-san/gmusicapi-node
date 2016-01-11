@@ -1,6 +1,4 @@
-def handleOpen(obj, myDaemon):
-	action = 'open'
-
+def handleOpen(obj, myDaemon, action):
 	email = obj['email'];
 	password = obj['password'];
 	if ('email' in obj):
@@ -14,12 +12,20 @@ def handleAction(obj, myDaemon):
 	
 	action = obj['action']
 	if action == 'open':
-		return handleOpen(obj, myDaemon)
+		return handleOpen(obj, myDaemon, action)
 
 	if action == 'getPlaylists':
-		return handleGetPlaylists(obj, myDaemon)
+		return handleGetPlaylists(obj, myDaemon, action)
 
 	return myDaemon.makeError(action, "Unrecognised action: {0}".format(action))
 
-def handleGetPlaylists(obj, myDaemon):
-	return myDaemon.makeError('getPlaylists', 'Not implemented')
+def handleGetPlaylists(obj, myDaemon, action):
+	# return myDaemon.makeError('getPlaylists', 'Not implemented')
+	api = myDaemon.getClient()
+	results = api.get_all_playlists()
+
+	return {
+		'action': action,
+		'outcome': 'success',
+		'payload': results
+	}
