@@ -34,18 +34,88 @@ var gmusicapi = require('gmusicapi-node');
 ```
 
 ## Invocation
-The `gmusicapi` you `require()`d will expose to you some useful functions. Err, one day.
 
+### Basic usage
 ```js
 var gmusicapi = require('gmusicapi-node')();
 
-// check what functions are exported by this library
-console.log(gmusicapi);
+// attempt to acquire a MobileClient
+gmusicapi.acquireMobileClient()
+.then(function(bindings) {
+	// check what functions are exported by this library
+	console.log(bindings);
 
-// all exported functions will be Promises
-gmusicapi.getPlaylists()
-.then(function(result) {
-	console.log(result);
+	return bindings
+	.getPlaylists()
+	.then(function(results) {
+		// you'll get an array of playlists
+		console.log(results);
+	})
+	.catch(console.error)
+	.finally(bindings.done);
+})
+.catch(console.error);
+```
+
+Example output:
+
+```json
+[
+{
+	kind: 'sj#playlist',
+	name: 'かたわ少女',
+	deleted: false,
+	lastModifiedTimestamp: '1412977187235428',
+	recentTimestamp: '1412977136104000',
+	shareToken: 'AMaBXykdBzHnRhaVhtpIBrYu6UwQFgaZDOtFL1XTGmMAc6aOEJ4GKvk2ZIVRmPH3m0dZFbTElvznB3b6EcA37NtD0IuHM_hU0w==',
+	clientId: '996CEDEF0DFAE259',
+	ownerProfilePhotoUrl: '(redacted)',
+	ownerName: '(redacted)',
+	accessControlled: false,
+	creationTimestamp: '1412977136108902',
+	id: '8bcfdbb5-b22e-3441-b815-a58d5b53afd9'
+}
+]
+```
+
+### Advanced usage
+
+You can use a non-default configuration like I do:
+
+```js
+var options = {
+	// these options will be passed to `python-shell`
+	pyshellOptions: {
+		pythonPath: '/usr/local/bin/python',
+		env: {
+			// which directories (delimited by : character) Python should inspect when importing modules
+			'PYTHONPATH': '/usr/local/lib/python2.7/site-packages'
+		}
+	},
+	credentials: {
+		email: 'some.guy@example.com',
+		password: 'hey'
+	},
+	/*
+	// or use credentials from keychain, like so:
+	credentials: {
+		usekeychain: true,
+		email: 'some.guy@example.com
+	},
+	*/
+	// skipping sanity checks saves a bit of time, if you're sure your Python environment works
+	skipSanityChecks: true
+};
+
+var lib = require('../src/js/index')(options);
+
+lib.acquireMobileClient()
+.then(function(bindings) {
+	return bindings
+	.getPlaylists()
+	.then(console.log)
+	.catch(console.error)
+	.finally(bindings.done);
 })
 .catch(console.error);
 ```
