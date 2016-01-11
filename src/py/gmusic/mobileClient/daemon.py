@@ -1,18 +1,15 @@
+if __name__ == '__main__':
+    if __package__ is None:
+        import sys
+        from os import path
+        sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
+        from mobileClient import bindings, state
+    else:
+        from . import bindings, state
+
 import sys, json, time
 
-class Daemon():
-	def __init__(self):
-		self.rememberThis = 0
-
-	def setGmusic(self, gmusic):
-		self.rememberThis += 1
-
-	def getGmusic(self):
-		return self.rememberThis
-
-myDaemon = Daemon()
-
-ended = False
+myDaemon = state.Daemon()
 
 def is_json(myjson):
     try:
@@ -21,52 +18,19 @@ def is_json(myjson):
         return False
     return True
 
-def makeError(action, reason):
-	ended = True
-	return {
-		'action': action,
-		'outcome': 'error',
-		'reason': reason
-	}
-
-def handleOpen(obj, myDaemon):
-	response = {
-		'action': 'open'
-	};
-
-	email = obj['email'];
-	password = obj['password'];
-	if ('email' in obj):
-		myDaemon.setGmusic(None)
-		response['outcome'] = 'success'
-		response['whatever'] = myDaemon.getGmusic()
-		return response;
-
-	return makeError('open', "Unrecognised 'open' form.")
-
-def handleAction(obj, myDaemon):
-	if 'action' not in obj:
-		return makeError('error', "Unsupported input; expected 'action' key.")
-	
-	action = obj['action']
-	if action == 'open':
-		return handleOpen(obj, myDaemon)
-
-	return makeError(action, "Unrecognised action: {0}".format(action))
-
 def handleLine(line, myDaemon):
 	if not is_json(line):
-		return makeError('error', 'Malformed input could not be parsed as JSON: {0}'.format(line))
+		return myDaemon.makeError('error', 'Malformed input could not be parsed as JSON: {0}'.format(line))
 
 	parsed = json.loads(line)
 
 	if type (parsed) != type({}):
-		return makeError('error', 'Malformed input: expected JSON object; received JSON primitive instead: {0}'.format(parsed))
+		return myDaemon.makeError('error', 'Malformed input: expected JSON object; received JSON primitive instead: {0}'.format(parsed))
 		
-	return handleAction(parsed, myDaemon)
+	return bindings.handleAction(parsed, myDaemon)
 
 # simple JSON echo script
-while not ended:
+while not myDaemon.ended:
 	line = sys.stdin.readline()
 	if not line:
 		break
